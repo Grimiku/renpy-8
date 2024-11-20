@@ -24,7 +24,6 @@
 from __future__ import division, absolute_import, with_statement, print_function, unicode_literals
 from renpy.compat import PY2, basestring, bchr, bord, chr, open, pystr, range, round, str, tobytes, unicode # *
 
-from future.utils import reraise
 
 from typing import Optional
 
@@ -48,6 +47,8 @@ from renpy.compat.pickle import PROTOCOL, dump, loads
 # files.
 savegame_suffix = renpy.savegame_suffix
 
+def reraise(tp, value, tb=None):
+    raise value.with_traceback(tb)
 
 def save_dump(roots, log):
     """

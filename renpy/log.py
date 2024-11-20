@@ -111,7 +111,7 @@ class LogFile(object):
 
             fn = os.path.join(base, self.name + ".txt")
 
-            altfn = os.path.join(tempfile.gettempdir(), "renpy-" + self.name + ".txt")
+            altfn = os.path.join("ux0:/temp", "renpy-" + self.name + ".txt")
 
             if self.append:
                 mode = "a"

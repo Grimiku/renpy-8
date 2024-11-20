@@ -28,8 +28,6 @@ from __future__ import division, absolute_import, with_statement, print_function
 from renpy.compat import PY2, basestring, bchr, bord, chr, open, pystr, range, round, str, tobytes, unicode # *
 
 
-from future.utils import raise_
-
 import time
 import pygame_sdl2 # @UnusedImport
 import os
@@ -1245,7 +1243,7 @@ def periodic():
             exc = periodic_exc
             periodic_exc = None
 
-            raise_(exc[0], exc[1], exc[2])
+            raise exc[0](exc[1]).with_traceback(exc[2])
 
         run_periodic = True
         periodic_condition.notify()

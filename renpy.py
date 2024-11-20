@@ -63,7 +63,7 @@ def path_to_gamedir(basedir, name):
     # Take the first candidate that exists.
     for i in candidates:
 
-        if i == "renpy":
+        if i == "renpy" or i == "":
             continue
 
         gamedir = os.path.join(basedir, i)
@@ -138,6 +138,9 @@ def path_to_saves(gamedir, save_directory=None): # type: (str, str|None) -> str
 
         print("Saving to", rv)
         return rv
+    
+    if renpy.vita:
+        return "ux0:/Ren'Py Data/" + save_directory
 
     if renpy.ios:
         from pyobjus import autoclass # type: ignore
@@ -279,7 +282,15 @@ android = ("ANDROID_PRIVATE" in os.environ)
 
 def main():
 
-    renpy_base = path_to_renpy_base()
+    import renpy
+    # Very horrible check for the Vita, but sets it on the right path,
+    # literally.
+    if renpy.vita:
+        os.environ["RENPY_RENDERER"] = "gles"
+        os.environ["RENPY_LESS_MEMORY"] = "True"
+        renpy_base = "ux0:app/PRE123124"
+    else:
+        renpy_base = path_to_renpy_base()
 
     sys.path.append(renpy_base)
 

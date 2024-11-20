@@ -719,7 +719,7 @@ def frequent():
             if m.group is not None:
                 group_texture[m.group] = old_group_texture.get(m.group, None)
 
-    if fullscreen:
+    if fullscreen and not renpy.vita:
 
             c = renpy.audio.audio.get_channel("movie")
 

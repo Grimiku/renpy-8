@@ -25,7 +25,6 @@
 from __future__ import division, absolute_import, with_statement, print_function, unicode_literals
 from renpy.compat import PY2, basestring, bchr, bord, chr, open, pystr, range, round, str, tobytes, unicode # *
 
-from future.utils import reraise
 
 import sys
 import time
@@ -40,6 +39,9 @@ il_statements = 0
 
 # The deadline for reporting we're not in an infinite loop.
 il_time = 0
+
+def reraise(tp, value, tb=None):
+    raise value.with_traceback(tb)
 
 
 def check_infinite_loop():

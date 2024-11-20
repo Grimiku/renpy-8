@@ -66,7 +66,6 @@ import sys
 import os
 import copy
 import types
-import site
 from collections import namedtuple
 
 ################################################################################
@@ -86,6 +85,11 @@ except ImportError:
     version = version_dict["version"]
 
 official = official and getattr(site, "renpy_build_official", False)
+try:
+    import site
+    official = official and getattr(site, "renpy_build_official", False)
+except NotImplementedError:
+    official = False
 
 VersionTuple = namedtuple("VersionTuple", ["major", "minor", "patch", "commit"])
 version_tuple = VersionTuple(*(int(i) for i in version.split(".")))
@@ -119,6 +123,7 @@ linux = False
 android = False
 ios = False
 emscripten = False
+vita = False
 
 # Should we enable experimental features and debugging?
 experimental = "RENPY_EXPERIMENTAL" in os.environ
@@ -170,6 +175,8 @@ elif platform.mac_ver()[0]:
     macintosh = True
 elif "ANDROID_PRIVATE" in os.environ:
     android = True
+elif sys.platform == 'vita':
+    vita = True
 elif sys.platform == 'emscripten' or "RENPY_EMSCRIPTEN" in os.environ:
     emscripten = True
 else:

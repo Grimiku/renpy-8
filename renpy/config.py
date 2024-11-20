@@ -97,7 +97,7 @@ savedir = None
 image_cache_size = None
 
 # The size of the image cache, in megabytes.
-image_cache_size_mb = 400
+image_cache_size_mb = 300
 
 # The number of statements we will analyze when doing predictive
 # loading. Please note that this is a total number of statements in a
@@ -569,7 +569,7 @@ tts_function = None
 tts_voice_channels = [ "voice" ]
 
 # The number of copies of each screen to keep in the screen cache.
-screen_cache_size = 4
+screen_cache_size = 2
 
 # A callback that adjusts the physical size of the screen.
 adjust_view_size = None

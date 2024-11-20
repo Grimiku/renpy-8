@@ -79,7 +79,7 @@ enabled_events = {
 
     pygame.TEXTEDITING,
     pygame.TEXTINPUT,
-    pygame.KEYMAPCHANGED,
+    #pygame.KEYMAPCHANGED,
 
     pygame.MOUSEMOTION,
     pygame.MOUSEBUTTONDOWN,
@@ -1072,7 +1072,7 @@ class Interface(object):
 
         s = "Total time until interface ready: {}s.".format(time.time() - import_time)
 
-        if renpy.android and not renpy.config.log_to_stdout:
+        if renpy.vita or renpy.android and not renpy.config.log_to_stdout:
             print(s)
 
         # Clear out any pending events.
@@ -1097,7 +1097,8 @@ class Interface(object):
         if renpy.config.mouse_focus_clickthrough:
             pygame.display.hint("SDL_MOUSE_FOCUS_CLICKTHROUGH", "1")
 
-        pygame.display.set_screensaver(renpy.config.allow_screensaver)
+        if not renpy.vita:
+            pygame.display.set_screensaver(renpy.config.allow_screensaver)
 
         # Needed for Ubuntu Unity.
         wmclass = renpy.config.save_directory or os.path.basename(sys.argv[0])
@@ -1200,7 +1201,7 @@ class Interface(object):
 
         renpy.config.renderer = renderer
 
-        if renpy.android or renpy.ios or renpy.emscripten:
+        if renpy.android or renpy.ios or renpy.emscripten or renpy.vita:
             renderers = [ "gles" ]
         elif renpy.windows:
             renderers = [ "gl", "angle", "gles" ]
@@ -1222,7 +1223,7 @@ class Interface(object):
             renderer = "auto"
 
         # Software renderer is the last hope for PC .
-        if not (renpy.android or renpy.ios or renpy.emscripten):
+        if not (renpy.android or renpy.ios or renpy.emscripten or renpy.vita):
             renderers = renderers + [ "sw" ]
 
         if renderer in renderers:
@@ -2332,7 +2333,7 @@ class Interface(object):
             # Step 4: Preload images (on emscripten)
             elif step == 4:
 
-                if expensive and renpy.emscripten:
+                if expensive and (renpy.emscripten or renpy.vita):
                     renpy.display.im.cache.preload_thread_pass()
 
                 step += 1
@@ -3126,7 +3127,8 @@ class Interface(object):
                 elif ev.type == pygame.TEXTINPUT:
                     self.text_editing = None
 
-                elif ev.type == pygame.KEYMAPCHANGED:
+                
+                #elif ev.type == pygame.KEYMAPCHANGED:
 
                     # Clear the mods when the keymap is changed, such as when
                     # an IME is selected. This fixes a problem on Windows 10 where
@@ -3135,10 +3137,10 @@ class Interface(object):
                     # This only happens when the GUI key is down, as shift can
                     # also change the keymap.
 
-                    if pygame.key.get_mods() & pygame.KMOD_GUI:
-                        pygame.key.set_mods(pygame.key.get_mods() & (pygame.KMOD_NUM | pygame.KMOD_CAPS))
+                #    if pygame.key.get_mods() & pygame.KMOD_GUI:
+                #        pygame.key.set_mods(pygame.key.get_mods() & (pygame.KMOD_NUM | pygame.KMOD_CAPS))
 
-                    continue
+                #    continue
 
                 elif self.text_editing and ev.type in [ pygame.KEYDOWN, pygame.KEYUP ]:
                     continue
