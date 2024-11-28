@@ -288,7 +288,7 @@ def main():
     if renpy.vita:
         os.environ["RENPY_RENDERER"] = "gles"
         os.environ["RENPY_LESS_MEMORY"] = "True"
-        renpy_base = "ux0:app/PRE123124"
+        renpy_base = sys.argv[0]
     else:
         renpy_base = path_to_renpy_base()
 
