@@ -2112,6 +2112,8 @@ class Interface(object):
         """
         Updates the text input state and text rectangle.
         """
+        
+        ev_en = self.event_peek()
 
         if renpy.store._text_rect is not None: # @UndefinedVariable
             self.text_rect = renpy.store._text_rect # @UndefinedVariable
@@ -2130,7 +2132,7 @@ class Interface(object):
 
                 pygame.key.set_text_input_rect(rect) # @UndefinedVariable
 
-            if not self.old_text_rect or not_shown:
+            elif (not self.old_text_rect or not_shown) and (ev_en is None or ev_en.type != pygame.KEYDOWN):
                 pygame.key.start_text_input() # @UndefinedVariable
 
                 if self.touch_keyboard:
