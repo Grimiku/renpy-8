@@ -145,6 +145,12 @@ cython(
     define_macros=macros,
     compile_args=[ "-Wno-deprecated-declarations" ] if ("RENPY_FFMPEG_NO_DEPRECATED_DECLARATIONS" in os.environ) else [ ])
 
+cython(
+    "renpy.renpyvita",
+    [ "renpy_vita.c", ],
+    libs=sdl,
+    define_macros=macros)
+
 cython("renpy.audio.filter")
 
 # renpy
