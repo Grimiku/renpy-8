@@ -1070,7 +1070,10 @@ def init():
                 pcm_ok = True
             except Exception:
                 pcm_ok = False
-
+                
+    if renpy.vita:
+        renpyvita.video_init()            
+    
     # Find all of the mixers in the game.
     mixers = []
 
