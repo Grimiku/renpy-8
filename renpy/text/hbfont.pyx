@@ -21,8 +21,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from __future__ import print_function
-
 from sdl2 cimport *
+from libc.string cimport memcpy
 from pygame_sdl2 cimport *
 import_pygame_sdl2()
 
@@ -254,12 +254,12 @@ cdef unsigned long io_func(FT_Stream stream, unsigned long offset, unsigned char
     cdef HBFace face
     cdef char *cbuf
     cdef unsigned long i
+    cdef const unsigned char *cbuf2
 
     face = <HBFace> stream.descriptor.pointer
     f = face.f
 
     if face.offset != offset:
-
         try:
             f.seek(offset)
             face.offset = offset
@@ -270,17 +270,14 @@ cdef unsigned long io_func(FT_Stream stream, unsigned long offset, unsigned char
     if count != 0:
         try:
             buf = f.read(count)
-            cbuf = buf
             count = len(buf)
-
-            for i from 0 <= i < count:
-                buffer[i] = cbuf[i]
+            cbuf2 = buf
+            memcpy(buffer, cbuf2, count)
         except Exception:
             traceback.print_exc()
             return -1
 
     face.offset += count
-
     return count
 
 cdef void close_func(FT_Stream stream):

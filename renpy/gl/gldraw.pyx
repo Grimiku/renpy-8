@@ -388,8 +388,8 @@ cdef class GLDraw:
 
         if self.gles:
             pygame.display.hint("SDL_OPENGL_ES_DRIVER", "1")
-            pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MAJOR_VERSION, 2);
-            pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MINOR_VERSION, 0);
+            pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MAJOR_VERSION, 2)
+            pygame.display.gl_set_attribute(pygame.GL_CONTEXT_MINOR_VERSION, 0)
             pygame.display.gl_set_attribute(pygame.GL_CONTEXT_PROFILE_MASK, pygame.GL_CONTEXT_PROFILE_ES)
 
         else:

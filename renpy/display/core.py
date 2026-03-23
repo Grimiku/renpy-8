@@ -3083,7 +3083,7 @@ class Interface(object):
                 # merge a mouse down and mouse up event with its successor. This
                 # prevents us from getting overwhelmed with too many events on
                 # a multitouch screen.
-                if renpy.android and (ev.type == pygame.MOUSEBUTTONDOWN or ev.type == pygame.MOUSEBUTTONUP):
+                if (renpy.android or renpy.vita) and (ev.type == pygame.MOUSEBUTTONDOWN or ev.type == pygame.MOUSEBUTTONUP):
                     pygame.event.clear(ev.type)
 
                 # Handle redraw timeouts.
