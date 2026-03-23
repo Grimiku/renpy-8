@@ -84,7 +84,7 @@ less_memory = True
 
 # Should we attempt to run in a mode that minimizes the number
 # of screen updates?
-less_updates = False
+less_updates = True
 
 # Should we never show the mouse?
 less_mouse = False

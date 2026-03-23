@@ -34,9 +34,9 @@ GLES_PORTABILITY = """\
 #ifdef GL_ES
   #ifdef GL_FRAGMENT_PRECISION_HIGH
     precision highp float;
-  # else
+  #else
     precision mediump float;
-  # endif
+  #endif
 #endif
 """
 
@@ -166,7 +166,6 @@ void main()
 }
 """
 
-
 BLEND_CLIP_SHADER = GLES_PORTABILITY + """\
 uniform vec4 Color;
 uniform sampler2D tex0;
@@ -278,7 +277,7 @@ def check_status(shader, handle, type):
     else:
         glGetProgramiv(handle, GL_INFO_LOG_LENGTH, &log_length)
 
-    log = ' ' * log_length
+    cdef bytearray log = bytearray(log_length)
 
     if shader:
         glGetShaderInfoLog(handle, log_length, &log_length, <char *> log)
