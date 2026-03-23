@@ -8,8 +8,9 @@
 #include "psp2/audioout.h"
 #include <pygame_sdl2/pygame_sdl2.h>
 #include <libswscale/swscale.h>
+#include <vitaGL.h>
 
-#define FRAMEBUFFER_ALIGNMENT 0x40000
+#define PHYCONT_MEM_ALIGNMENT (1024 * 1024)
 
 #ifndef ALIGN
 #define ALIGN(x, a) (((x) + ((a)-1)) & ~((a)-1))
@@ -277,25 +278,32 @@ static void mem_free(void *p, void* pMemory) {
 }
 
 static void *gpu_alloc(void *p, uint32_t alignment, uint32_t size) {
-    void *res = NULL;
+    // Aligning size to required phycont requirements (1MB)
+    size = ALIGN(size, PHYCONT_MEM_ALIGNMENT);
 
-    if (alignment < FRAMEBUFFER_ALIGNMENT)
-        alignment = FRAMEBUFFER_ALIGNMENT;
+    // Allocating a physically contiguous non-cached memblock
+    SceUID blk = sceKernelAllocMemBlock("av_blk", SCE_KERNEL_MEMBLOCK_TYPE_USER_MAIN_PHYCONT_NC_RW, size, NULL);
+    if (blk < 0)
+        return NULL;
 
-    size = ALIGN(size, alignment);
-    SceKernelAllocMemBlockOpt opt;
-    memset(&opt, 0, sizeof(opt));
-    opt.size = sizeof(SceKernelAllocMemBlockOpt);
-    opt.attr = SCE_KERNEL_ALLOC_MEMBLOCK_ATTR_HAS_ALIGNMENT;
-    opt.alignment = alignment;
-    SceUID memblock = sceKernelAllocMemBlock("Video Memblock", SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW, size, &opt);
-    sceKernelGetMemBlockBase(memblock, &res);
-    sceGxmMapMemory(res, size, (SceGxmMemoryAttribFlags)(SCE_GXM_MEMORY_ATTRIB_READ | SCE_GXM_MEMORY_ATTRIB_WRITE));
+    // Mapping it as read/write for GPU usage
+    void *res;
+    if (sceKernelGetMemBlockBase(blk, &res) < 0)
+        return NULL;
+
+    if (sceGxmMapMemory(res, size, SCE_GXM_MEMORY_ATTRIB_RW) < 0)
+        return NULL;
+
     return res;
 }
 
 static void gpu_free(void *p, void *ptr) {
-    SceUID memblock = sceKernelFindMemBlockByAddr(ptr, 0);
+    glFinish();
+
+    SceUID blk = sceKernelFindMemBlockByAddr(ptr, 0);
+    if (blk < 0)
+        return;
+
     sceGxmUnmapMemory(ptr);
-    sceKernelFreeMemBlock(memblock);
+    sceKernelFreeMemBlock(blk);
 }
