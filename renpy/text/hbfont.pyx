@@ -247,10 +247,14 @@ cdef bint is_zerowidth(unsigned int char):
     return False
 
 cdef unsigned long io_func(FT_Stream stream, unsigned long offset, unsigned char *buffer, unsigned long count):
+    """
+    Seeks to offset, and then reads count bytes from the stream into buffer.
+    """
+
     cdef HBFace face
     cdef char *cbuf
     cdef unsigned long i
-    cdef const unsigned char *cbuf2  # add this
+    cdef const unsigned char *cbuf2
 
     face = <HBFace> stream.descriptor.pointer
     f = face.f
