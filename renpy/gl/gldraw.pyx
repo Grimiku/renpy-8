@@ -112,7 +112,7 @@ cdef class GLDraw:
         self.display_info = None
 
         # Should we use the fast (but incorrect) dissolve mode?
-        self.fast_dissolve = False # renpy.android
+        self.fast_dissolve = True # renpy.android
 
         # Did we do the texture test at least once?
         self.did_texture_test = False
