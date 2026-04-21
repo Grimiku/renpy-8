@@ -112,7 +112,7 @@ cdef class GLDraw:
         self.display_info = None
 
         # Should we use the fast (but incorrect) dissolve mode?
-        self.fast_dissolve = False # renpy.android
+        self.fast_dissolve = True # renpy.android
 
         # Did we do the texture test at least once?
         self.did_texture_test = False
@@ -553,7 +553,7 @@ cdef class GLDraw:
                 "fbo",
                 "GL_ARB_framebuffer_object")
 
-        if use_fbo:
+        if use_fbo and not renpy.vita:
             renpy.display.log.write("Using FBO RTT.")
             self.rtt = glrtt_fbo.FboRtt()
             self.info["rtt"] = "fbo"
@@ -573,7 +573,7 @@ cdef class GLDraw:
         renpy.display.log.write("Using {0} renderer.".format(self.info["renderer"]))
 
         # Figure out the sizes of texture that render properly.
-        if not self.did_texture_test:
+        if not renpy.vita:
             rv = gltexture.test_texture_sizes(self.environ, self)
         else:
             rv = True
