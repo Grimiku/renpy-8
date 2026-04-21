@@ -587,7 +587,8 @@ cdef class ShaderEnviron(Environ):
         cdef int cx, cy, cw, ch
         cdef int psw, psh
 
-        if clip_box == draw.default_clip:
+        if (clip_box == draw.default_clip or 
+            (minx <= 0 and miny <= 0 and maxx >= draw.virtual_size[0] and maxy >= draw.virtual_size[1])):
             self.unset_clip(draw)
             return
 
