@@ -1201,8 +1201,10 @@ class Interface(object):
 
         renpy.config.renderer = renderer
 
-        if renpy.android or renpy.ios or renpy.emscripten or renpy.vita:
+        if renpy.android or renpy.ios or renpy.emscripten:
             renderers = [ "gles" ]
+        elif renpy.vita:
+            renderers = [ "gles2" ]
         elif renpy.windows:
             renderers = [ "gl", "angle", "gles" ]
         else:

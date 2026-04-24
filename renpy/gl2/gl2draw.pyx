@@ -366,7 +366,7 @@ cdef class GL2Draw:
 
         pwidth, pheight = self.select_physical_size(physical_size)
 
-        if renpy.android or renpy.ios:
+        if renpy.android or renpy.ios or renpy.vita:
             fullscreen = True
         elif renpy.emscripten:
             fullscreen = False
@@ -404,6 +404,11 @@ cdef class GL2Draw:
         if renpy.android:
             pwidth = 0
             pheight = 0
+            gles = True
+        
+        elif renpy.vita:
+            pwidth = 960
+            pheight = 544
             gles = True
 
         elif renpy.ios:
